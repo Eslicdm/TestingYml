@@ -31,7 +31,7 @@ jobs:
 
       - name: Upload Lint Reports
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: lint-report
           path: 'project/app/build/reports/lint-results-debug'
