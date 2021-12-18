@@ -27,9 +27,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run Debug Lint
-        run:
-        git update-index --chmod=+x gradlew
-        ./gradlew lintDebug
+        run: ./gradlew lintDebug
 
       - name: Upload Lint Reports
         if: ${{ always() }}
