@@ -34,4 +34,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: lint-report
-          path: '**/build/reports/lint.html'
+          path: 'app/build/reports/lint.html'
