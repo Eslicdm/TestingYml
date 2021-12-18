@@ -30,5 +30,8 @@ jobs:
         run: ./gradlew lintDebug
 
       - name: Upload Lint Reports
-        working-directory: robot/tests
-        run: app/build/reports/lint-results-debug.html
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v1
+        with:
+          name: lint-report
+          path: '**/build/reports/lint-results-*'
