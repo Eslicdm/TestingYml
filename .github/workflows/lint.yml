@@ -31,4 +31,4 @@ jobs:
 
       - name: Upload Lint Reports
         working-directory: robot/tests
-        run: 'project/app/build/reports/lint-results-debug'
+        run: app/build/reports/lint-results-debug.html
