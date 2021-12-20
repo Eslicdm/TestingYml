@@ -8,37 +8,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  instrumentation-test:
-#    needs: [unit-test]
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Run espresso tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew connectedCheck
-
-      - name: Upload test report
-        uses: actions/upload-artifact@v2
-        with:
-          name: instrumentation_test_report
-          path: app/build/reports/androidTests/connected/
-
+#  lint_job:
+#    name: Lint
+#    runs-on: ubuntu-latest
+#    continue-on-error: true
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Run Debug Lint
+#        run: ./gradlew lintDebug
+#
+#      - name: Upload Lint Reports
+#        if: ${{ always() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: lint-report
+#          path: app/build/reports/lint-results-debug.html
+#
 #  unit-test:
-##    needs: [lint]
+#    needs: [lint]
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Checkout
@@ -64,9 +62,37 @@ jobs:
 #          name: unit-test-report
 #          path: app/build/reports/tests/testDebugUnitTest/
 
+  instrumentation-test:
+#    needs: [unit-test]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#  lint_job:
-#    name: Lint
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Run espresso tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew connectedDebugAndroidTest
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: instrumentation-test-report
+          path: app/build/reports/androidTests/connected/
+
+#  assemble_job:
+#    name: Assemble
 #    runs-on: ubuntu-latest
 #    continue-on-error: true
 #    steps:
@@ -83,12 +109,11 @@ jobs:
 #          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 #          restore-keys: |
 #            ${{ runner.os }}-gradle-
-#      - name: Run Debug Lint
-#        run: ./gradlew lintDebug
+#      - name: Assemble Debug
+#        run: ./gradlew assembleDebug
 #
-#      - name: Upload Lint Reports
-#        if: ${{ always() }}
+#      - name: Upload APK
 #        uses: actions/upload-artifact@v2
 #        with:
-#          name: lint-report
-#          path: app/build/reports/lint-results-debug.html
+#          name: apk
+#          path: app/build/outputs/apk/debug/**.apk
