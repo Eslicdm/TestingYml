@@ -8,13 +8,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint_job:
-    name: Lint
+  unit-test:
+#    needs: [lint]
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
-
-      - name: Checkout
+      - name: Checkout the code
         uses: actions/checkout@v2
 
       - name: Restore Cache
@@ -26,12 +24,41 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Run Debug Lint
-        run: ./gradlew lintDebug
 
-      - name: Upload Lint Reports
-        if: ${{ always() }}
+      - name: Run tests
+        run: ./gradlew test
+
+      - name: Upload test report
         uses: actions/upload-artifact@v2
         with:
-          name: lint-report
-          path: app/build/reports/lint-results-debug.html
+          name: unit_test_report
+          path: app/build/reports/tests/testDebugUnitTest/
+
+
+#  lint_job:
+#    name: Lint
+#    runs-on: ubuntu-latest
+#    continue-on-error: true
+#    steps:
+#
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Run Debug Lint
+#        run: ./gradlew lintDebug
+#
+#      - name: Upload Lint Reports
+#        if: ${{ always() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: lint-report
+#          path: app/build/reports/lint-results-debug.html
