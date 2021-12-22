@@ -23,7 +23,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-}
+}compilation error
+another error
 
 @Composable
 fun Greeting(name: String) {
